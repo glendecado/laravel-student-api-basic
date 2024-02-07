@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "./axiosInstance";
 
 const App = () => {
-    const [users, setUsers] = useState([]); // Initialize users state to an empty array
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -28,7 +28,6 @@ const App = () => {
                 <p>Loading...</p>
             ) : (
                 <ul>
-                    {/* Map over the users array and render each user's first name */}
                     {users.map((user) => (
                         <li key={user.id}>
                             {user.fname} {user.lname}
