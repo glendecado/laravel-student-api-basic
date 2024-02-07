@@ -14,7 +14,7 @@ const App = () => {
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
-                setUsers([]); // Reset users state to an empty array in case of error
+                setUsers([]);
                 setLoading(false);
             }
         };
