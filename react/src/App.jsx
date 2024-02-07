@@ -1,41 +1,43 @@
-import axios from "axios";
-import React, { Component } from "react";
+import { useEffect, useState } from "react";
+import axiosInstance from "./axiosInstance";
 
-class App extends Component {
-    constructor() {
-        super();
-        this.state = {
-            data: [],
-        };
-    }
+const App = () => {
+    const [users, setUsers] = useState([]); // Initialize users state to an empty array
+    const [loading, setLoading] = useState(false);
 
-    componentDidMount() {
-        axios
-            .get("http://127.0.0.1:8000/api/students", {
-                headers: {
-                    Accept: "application/json",
-                },
-            })
-            .then((response) => {
-                this.setState({ data: response.data });
-            })
-            .catch((error) => {
+    useEffect(() => {
+        const getUsers = async () => {
+            setLoading(true);
+            try {
+                const response = await axiosInstance.get("/students");
+                setUsers(response.data);
+                setLoading(false);
+            } catch (error) {
                 console.error("Error fetching data:", error);
-            });
-    }
+                setUsers([]); // Reset users state to an empty array in case of error
+                setLoading(false);
+            }
+        };
 
-    render() {
-        const { data } = this.state;
+        getUsers();
+    }, []);
+    return (
+        <>
+            <h1>Users:</h1>
+            {loading ? (
+                <p>Loading...</p>
+            ) : (
+                <ul>
+                    {/* Map over the users array and render each user's first name */}
+                    {users.map((user) => (
+                        <li key={user.id}>
+                            {user.fname} {user.lname}
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </>
+    );
+};
 
-        return (
-            <div>
-                {data.map((item) => (
-                    <div key={item.id}>
-                        {item.fname} {item.lname}
-                    </div>
-                ))}
-            </div>
-        );
-    }
-}
 export default App;
